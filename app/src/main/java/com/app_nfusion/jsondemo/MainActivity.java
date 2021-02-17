@@ -16,9 +16,10 @@ public class MainActivity extends AppCompatActivity {
     TextView textView;
 
     JSONObject jsonObject = new JSONObject();
+    JSONObject dogObject = new JSONObject();
 
     @SuppressLint("StaticFieldLeak")
-    void getData(){
+    void getData() {
         new AsyncTask<Object, Object, Object>() {
             @Override
             protected void onPreExecute() {
@@ -28,15 +29,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected Object doInBackground(Object[] objects) {
                 try {
-                    String jsonString = Jsoup.connect("https://api.myjson.com/bins/wcr1c").ignoreContentType(true).timeout(10000).get().text();
-                    Log.e("x", "JSON Stirng : ");
-                    Log.e("x" , jsonString);
+                    String jsonString = Jsoup.connect("https://dog.ceo/api/breeds/list/all").ignoreContentType(true).timeout(10000).get().text();
+                    Log.e("x", jsonString);
 
                     jsonObject = new JSONObject(jsonString);
+                    dogObject = jsonObject.getJSONObject("message");
 
                     return "ok";
-                }catch (Exception e){
-                    Log.e("x", "WS Parse Ex : " +e);
+                } catch (Exception e) {
+                    Log.e("x", "WS Parse Ex : " + e);
 
                     return e.toString();
                 }
@@ -47,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
                 //swipeRefreshLayout.setRefreshing(false);
 
                 try {
-                    textView.setText(jsonObject.toString());
-                }catch (Exception e){
-                    Log.e("x", "Item Parse Ex : " +e);
+                    textView.setText(dogObject.getJSONArray("australian").toString());
+                } catch (Exception e) {
+                    Log.e("x", "Item Parse Ex : " + e);
                 }
             }
         }.execute();
